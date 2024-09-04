@@ -3,7 +3,7 @@ package utils
 import (
 	"sync"
 
-	"github.com/generic_cache_wabbit"
+	"github.com/bluearchive/generic_cache_wabbit"
 )
 
 const listenerSlots = 128
