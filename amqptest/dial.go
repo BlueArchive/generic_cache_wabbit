@@ -4,9 +4,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/generic_cache_wabbit"
-	"github.com/generic_cache_wabbit/amqptest/server"
-	"github.com/generic_cache_wabbit/utils"
+	"github.com/bluearchive/generic_cache_wabbit"
+	"github.com/bluearchive/generic_cache_wabbit/amqptest/server"
+	"github.com/bluearchive/generic_cache_wabbit/utils"
 	"github.com/pborman/uuid"
 )
 
