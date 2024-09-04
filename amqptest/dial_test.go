@@ -6,8 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/generic_cache_wabbit"
-	"github.com/generic_cache_wabbit/amqptest/server"
+	"github.com/bluearchive/generic_cache_wabbit/amqptest/server"
 	"github.com/pborman/uuid"
 )
 

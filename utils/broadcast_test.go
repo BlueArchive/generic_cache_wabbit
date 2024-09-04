@@ -1,10 +1,9 @@
 package utils
 
 import (
+	"github.com/NeowayLabs/wabbit"
 	"testing"
 	"time"
-
-	"github.com/generic_cache_wabbit"
 )
 
 func TestBroadcast(t *testing.T) {
