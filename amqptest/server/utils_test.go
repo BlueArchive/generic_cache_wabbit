@@ -3,7 +3,7 @@ package server
 import (
 	"testing"
 
-	"github.com/NeowayLabs/wabbit"
+	"github.com/bluearchive/generic_cache_wabbit"
 )
 
 func matchSuccess(t *testing.T, b, r string, expected bool) {

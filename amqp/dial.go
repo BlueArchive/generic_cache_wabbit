@@ -4,8 +4,8 @@ import (
 	"crypto/tls"
 	"time"
 
-	"github.com/NeowayLabs/wabbit"
-	"github.com/NeowayLabs/wabbit/utils"
+	"github.com/bluearchive/generic_cache_wabbit"
+	"github.com/bluearchive/generic_cache_wabbit/utils"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 

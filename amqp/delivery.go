@@ -3,7 +3,7 @@ package amqp
 import (
 	"time"
 
-	"github.com/NeowayLabs/wabbit"
+	"github.com/bluearchive/generic_cache_wabbit"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -37,4 +37,8 @@ func (d *Delivery) Timestamp() time.Time {
 
 func (d *Delivery) ContentType() string {
 	return d.Delivery.ContentType
+}
+
+func (d *Delivery) RoutingKey() string {
+	return d.Delivery.RoutingKey
 }

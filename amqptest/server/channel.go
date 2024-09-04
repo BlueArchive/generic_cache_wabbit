@@ -6,8 +6,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/NeowayLabs/wabbit"
-	"github.com/NeowayLabs/wabbit/utils"
+	"github.com/bluearchive/generic_cache_wabbit"
+	"github.com/bluearchive/generic_cache_wabbit/utils"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -113,6 +113,7 @@ func (ch *Channel) Publish(exc, route string, msg []byte, opt wabbit.Option) err
 		messageId,
 		wabbit.Option(hdrs),
 		contentType,
+		route,
 	)
 
 	err := ch.VHost.Publish(exc, route, d, nil)
@@ -173,7 +174,7 @@ func (ch *Channel) Consume(queue, consumerName string, _ wabbit.Option) (<-chan 
 				// since we keep track of unacked messages for
 				// the channel, we need to rebind the delivery
 				// to the consumer channel.
-				d = NewDelivery(ch, d.Body(), d.DeliveryTag(), d.MessageId(), d.Headers(), d.ContentType())
+				d = NewDelivery(ch, d.Body(), d.DeliveryTag(), d.MessageId(), d.Headers(), d.ContentType(), d.RoutingKey())
 
 				ch.addUnacked(d, q)
 
@@ -332,6 +333,8 @@ func (ch *Channel) Close() error {
 		close(c)
 	}
 	ch.publishListeners = []chan wabbit.Confirmation{}
+	// Close notify channel
+	ch.errSpread.Write(utils.NewError(0, "channel closed", false, false))
 
 	return nil
 }

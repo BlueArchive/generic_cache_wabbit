@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/NeowayLabs/wabbit"
-	"github.com/NeowayLabs/wabbit/amqptest"
-	"github.com/NeowayLabs/wabbit/amqptest/server"
+	"github.com/generic_cache_wabbit"
+	"github.com/generic_cache_wabbit/amqptest"
+	"github.com/generic_cache_wabbit/amqptest/server"
 )
 
 func TestBasicUsage(t *testing.T) {

@@ -1,6 +1,6 @@
 package server
 
-import "github.com/NeowayLabs/wabbit"
+import "github.com/bluearchive/generic_cache_wabbit"
 
 const (
 	QueueMaxLen = 2 << 8

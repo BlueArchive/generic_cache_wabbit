@@ -9,6 +9,10 @@ import (
 func topicMatch(r1, r2 string) bool {
 	var match bool
 
+	if r1 == "#" {
+		return true
+	}
+
 	bparts := strings.Split(r1, ".")
 	rparts := strings.Split(r2, ".")
 

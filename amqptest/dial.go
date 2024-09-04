@@ -4,9 +4,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/NeowayLabs/wabbit"
-	"github.com/NeowayLabs/wabbit/amqptest/server"
-	"github.com/NeowayLabs/wabbit/utils"
+	"github.com/generic_cache_wabbit"
+	"github.com/Ngeneric_cache_wabbit/amqptest/server"
+	"github.com/generic_cache_wabbit/utils"
 	"github.com/pborman/uuid"
 )
 
@@ -168,6 +168,8 @@ func (conn *Conn) Close() error {
 	} else {
 		conn.errSpread.Delete(conn.errChan)
 		close(conn.errChan)
+		// Send close notification to close notify channel
+		conn.errSpread.Write(utils.NewError(0, "connection closed", false, false))
 		conn.defErrDone <- true
 	}
 
