@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/generic_cache_wabbit"
-	"github.com/Ngeneric_cache_wabbit/amqptest/server"
+	"github.com/generic_cache_wabbit/amqptest/server"
 	"github.com/generic_cache_wabbit/utils"
 	"github.com/pborman/uuid"
 )
