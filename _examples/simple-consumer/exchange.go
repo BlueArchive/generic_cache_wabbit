@@ -10,8 +10,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/NeowayLabs/wabbit"
-	"github.com/NeowayLabs/wabbit/amqp"
+	"github.com/bluearchive/generic_cache_wabbit"
+	"github.com/bluearchive/generic_cache_wabbit/amqp"
 )
 
 var (

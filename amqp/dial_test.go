@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/NeowayLabs/wabbit"
+	"github.com/bluearchive/generic_cache_wabbit"
 	docker "github.com/fsouza/go-dockerclient"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/tiago4orion/conjure"
@@ -123,14 +123,12 @@ func testDialGeneric(t *testing.T, dialFunc func() error) {
 	}
 
 	err = waitRabbitOK("localhost", rabbitmqPort1)
-
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
 	err = dialFunc()
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -173,21 +171,18 @@ func TestAutoRedial(t *testing.T) {
 
 	dockerClient.Remove(rabbitmqCtnName2)
 	rabbitmqCtn, err = dockerClient.Run(rabbitmqSpec2)
-
 	if err != nil {
 		t.Errorf("Failed to start rabbitmq: %s", err.Error())
 		return
 	}
 
 	err = waitRabbitOK("localhost", rabbitmqPort2)
-
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
 	conn, err := Dial("amqp://guest:guest@localhost:35673/%2f")
-
 	if err != nil {
 		t.Error(err)
 		return
@@ -212,7 +207,6 @@ func TestAutoRedial(t *testing.T) {
 		time.Sleep(1 * time.Second)
 
 		err := dockerClient.StartContainer(rabbitmqCtnName2, nil)
-
 		if err != nil {
 			t.Error(err)
 			return
