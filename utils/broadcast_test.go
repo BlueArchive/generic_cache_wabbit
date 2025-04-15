@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/NeowayLabs/wabbit"
+	"github.com/bluearchive/generic_cache_wabbit"
 	"testing"
 	"time"
 )

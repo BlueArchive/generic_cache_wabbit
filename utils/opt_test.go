@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/NeowayLabs/wabbit"
+	"github.com/bluearchive/generic_cache_wabbit"
 	"testing"
 
 	amqp "github.com/rabbitmq/amqp091-go"
