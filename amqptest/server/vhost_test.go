@@ -2,6 +2,7 @@ package server
 
 import (
 	"testing"
+	"time"
 
 	"github.com/bluearchive/generic_cache_wabbit"
 )
@@ -117,7 +118,7 @@ func TestQueueBind(t *testing.T) {
 		return
 	}
 
-	err = nwExchange.route("process.data", NewDelivery(&Channel{}, []byte{}, 1, "", wabbit.Option{}, ""))
+	err = nwExchange.route("process.data", NewDelivery(&Channel{}, []byte{}, 1, "", wabbit.Option{}, "", "", time.Now()))
 
 	if err != nil {
 		t.Error(err)
@@ -154,7 +155,7 @@ func TestBasicPublish(t *testing.T) {
 		return
 	}
 
-	err = vh.Publish("neoway", "process.data", NewDelivery(&Channel{}, []byte("teste"), 1, "", wabbit.Option{}, ""), nil)
+	err = vh.Publish("neoway", "process.data", NewDelivery(&Channel{}, []byte("teste"), 1, "", wabbit.Option{}, "", "", time.Now()), nil)
 
 	if err != nil {
 		t.Error(err)

@@ -17,10 +17,11 @@ type (
 		messageId     string
 		channel       *Channel
 		contentType   string
+		timestamp     time.Time
 	}
 )
 
-func NewDelivery(ch *Channel, data []byte, tag uint64, messageId string, hdrs wabbit.Option, contentType string, route string) *Delivery {
+func NewDelivery(ch *Channel, data []byte, tag uint64, messageId string, hdrs wabbit.Option, contentType string, route string, timestamp time.Time) *Delivery {
 	return &Delivery{
 		data:          data,
 		headers:       hdrs,
@@ -29,6 +30,7 @@ func NewDelivery(ch *Channel, data []byte, tag uint64, messageId string, hdrs wa
 		messageId:     messageId,
 		contentType:   contentType,
 		originalRoute: route,
+		timestamp:     timestamp,
 	}
 }
 
@@ -65,7 +67,7 @@ func (d *Delivery) MessageId() string {
 }
 
 func (d *Delivery) Timestamp() time.Time {
-	return time.Now()
+	return d.timestamp
 }
 
 func (d *Delivery) ContentType() string {
