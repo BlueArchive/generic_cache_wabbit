@@ -6,6 +6,7 @@ import "time"
 
 type (
 	// Option is a map of AMQP configurations
+	// amqp091 calls this amqp.Table, same map definition
 	Option map[string]interface{}
 
 	// Conn is the amqp connection interface
