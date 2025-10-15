@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/bluearchive/generic_cache_wabbit"
 	"github.com/bluearchive/generic_cache_wabbit/amqptest"
 	"github.com/bluearchive/generic_cache_wabbit/amqptest/server"
 )
@@ -222,7 +223,18 @@ func sub(conn wabbit.Conn, t *testing.T, done chan bool, bindDone chan bool) {
 	deliveryDone = make(chan bool)
 
 	go func() {
+		pauseMs := time.Duration(5 * time.Millisecond)
+		time.Sleep(pauseMs)
+		now := time.Now()
+
 		msg1 := <-deliveries
+
+		// check that the message timestamp is the publish time, not time.Now() as originally implemented
+		if now.Sub(msg1.Timestamp()) < pauseMs {
+			t.Errorf("Expected timestamp to be older than current time: %v now %v", msg1.Timestamp(), now)
+			deliveryDone <- true
+			return
+		}
 
 		if string(msg1.Body()) != "msg1" {
 			t.Errorf("Unexpected message: %s", string(msg1.Body()))

@@ -4,6 +4,8 @@ import (
 	"time"
 
 	"github.com/bluearchive/generic_cache_wabbit"
+	amqp "github.com/bluearchive/generic_cache_wabbit/amqp"
+	amqp091 "github.com/rabbitmq/amqp091-go"
 )
 
 type (
@@ -18,10 +20,21 @@ type (
 		channel       *Channel
 		contentType   string
 		timestamp     time.Time
+		delivery      *amqp.Delivery
 	}
 )
 
 func NewDelivery(ch *Channel, data []byte, tag uint64, messageId string, hdrs wabbit.Option, contentType string, route string, timestamp time.Time) *Delivery {
+	d := amqp091.Delivery{
+		// Acknowledger: ch,
+		Body:        data,
+		DeliveryTag: tag,
+		MessageId:   messageId,
+		ContentType: contentType,
+		RoutingKey:  route,
+		Timestamp:   timestamp,
+	}
+	d2 := amqp.Delivery{&d}
 	return &Delivery{
 		data:          data,
 		headers:       hdrs,
@@ -31,6 +44,7 @@ func NewDelivery(ch *Channel, data []byte, tag uint64, messageId string, hdrs wa
 		contentType:   contentType,
 		originalRoute: route,
 		timestamp:     timestamp,
+		delivery:      &d2,
 	}
 }
 
@@ -47,7 +61,7 @@ func (d *Delivery) Reject(requeue bool) error {
 }
 
 func (d *Delivery) Body() []byte {
-	return d.data
+	return d.delivery.Body()
 }
 
 func (d *Delivery) Headers() wabbit.Option {

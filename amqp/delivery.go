@@ -32,7 +32,7 @@ func (d *Delivery) MessageId() string {
 }
 
 func (d *Delivery) Timestamp() time.Time {
-	return time.Now()
+	return d.Delivery.Timestamp
 }
 
 func (d *Delivery) ContentType() string {
