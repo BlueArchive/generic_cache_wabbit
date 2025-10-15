@@ -10,6 +10,7 @@ import (
 
 type (
 	// Delivery is an interface to delivered messages
+	// FIXME: this shadows the actual Delivery in amqp/delivery.go, thus not testing its calls
 	Delivery struct {
 		data          []byte
 		headers       wabbit.Option
@@ -25,17 +26,26 @@ type (
 )
 
 func NewDelivery(ch *Channel, data []byte, tag uint64, messageId string, hdrs wabbit.Option, contentType string, route string, timestamp time.Time) *Delivery {
+	// amqp Delivery object
 	d := amqp091.Delivery{
-		// Acknowledger: ch,
-		Body:        data,
-		DeliveryTag: tag,
-		MessageId:   messageId,
+		Acknowledger: ch,
+		Headers:     amqp091.Table(hdrs),
 		ContentType: contentType,
-		RoutingKey:  route,
+		MessageId:   messageId,
 		Timestamp:   timestamp,
+		// valid on Consume only:
+		ConsumerTag: "",
+		// valid on Get only:
+		DeliveryTag: tag,
+		RoutingKey:  route,
+		Body:        data,
 	}
+	// wabbit Delivery wrappers the amqp object
 	d2 := amqp.Delivery{&d}
-	return &Delivery{
+
+	// return a test Delivery object that delegates all its methods to the actual
+	d3 := &Delivery{
+		// some tests depend on the fields of this mock, so leave them for now
 		data:          data,
 		headers:       hdrs,
 		channel:       ch,
@@ -46,18 +56,19 @@ func NewDelivery(ch *Channel, data []byte, tag uint64, messageId string, hdrs wa
 		timestamp:     timestamp,
 		delivery:      &d2,
 	}
+	return d3;
 }
 
 func (d *Delivery) Ack(multiple bool) error {
-	return d.channel.Ack(d.tag, multiple)
+	return d.delivery.Acknowledger.Ack(d.delivery.DeliveryTag(), multiple)
 }
 
 func (d *Delivery) Nack(multiple, requeue bool) error {
-	return d.channel.Nack(d.tag, multiple, requeue)
+	return d.delivery.Acknowledger.Nack(d.delivery.DeliveryTag(), multiple, requeue)
 }
 
 func (d *Delivery) Reject(requeue bool) error {
-	return d.channel.Nack(d.tag, false, requeue)
+	return d.delivery.Acknowledger.Nack(d.delivery.DeliveryTag(), false, requeue)
 }
 
 func (d *Delivery) Body() []byte {
@@ -65,29 +76,29 @@ func (d *Delivery) Body() []byte {
 }
 
 func (d *Delivery) Headers() wabbit.Option {
-	return d.headers
+	return wabbit.Option(d.delivery.Headers())
 }
 
 func (d *Delivery) DeliveryTag() uint64 {
-	return d.tag
+	return d.delivery.DeliveryTag()
 }
 
 func (d *Delivery) ConsumerTag() string {
-	return d.consumerTag
+	return d.delivery.ConsumerTag()
 }
 
 func (d *Delivery) MessageId() string {
-	return d.messageId
+	return d.delivery.MessageId()
 }
 
 func (d *Delivery) Timestamp() time.Time {
-	return d.timestamp
+	return d.delivery.Timestamp()
 }
 
 func (d *Delivery) ContentType() string {
-	return d.contentType
+	return d.delivery.ContentType()
 }
 
 func (d *Delivery) RoutingKey() string {
-	return d.originalRoute
+	return d.delivery.RoutingKey()
 }

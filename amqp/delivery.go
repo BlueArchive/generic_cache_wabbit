@@ -7,6 +7,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
+// pointer to rabbitmq Delivery, so can change the fields into methods
 type Delivery struct {
 	*amqp.Delivery
 }

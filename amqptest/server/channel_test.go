@@ -319,7 +319,7 @@ func TestAckedMessagesAreCommited(t *testing.T) {
 	go func() {
 		data := <-deliveries2
 
-		t.Errorf("Data ack'ed delivered again: %s", string(data.Body()))
+		t.Errorf("Data ack'ed delivered again: %d: %s", data.DeliveryTag(), string(data.Body()))
 
 		panic("never reach here. Message was ack'ed")
 	}()

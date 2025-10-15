@@ -223,7 +223,7 @@ func sub(conn wabbit.Conn, t *testing.T, done chan bool, bindDone chan bool) {
 	deliveryDone = make(chan bool)
 
 	go func() {
-		pauseMs := time.Duration(5 * time.Millisecond)
+		pauseMs := time.Duration(100 * time.Millisecond)
 		time.Sleep(pauseMs)
 		now := time.Now()
 
