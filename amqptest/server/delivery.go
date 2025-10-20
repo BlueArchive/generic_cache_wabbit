@@ -10,7 +10,6 @@ import (
 
 type (
 	// Delivery is an interface to delivered messages
-	// FIXME: this shadows the actual Delivery in amqp/delivery.go, thus not testing its calls
 	Delivery struct {
 		data          []byte
 		headers       wabbit.Option
