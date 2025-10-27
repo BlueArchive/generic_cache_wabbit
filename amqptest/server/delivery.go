@@ -25,7 +25,7 @@ type (
 )
 
 func NewDelivery(ch *Channel, data []byte, tag uint64, messageId string, hdrs wabbit.Option, contentType string, route string, timestamp time.Time) *Delivery {
-	// amqp Delivery object
+	// amqp091 Delivery object from rabbitmq
 	d := amqp091.Delivery{
 		Acknowledger: ch,
 		Headers:     amqp091.Table(hdrs),
@@ -39,10 +39,10 @@ func NewDelivery(ch *Channel, data []byte, tag uint64, messageId string, hdrs wa
 		RoutingKey:  route,
 		Body:        data,
 	}
-	// wabbit Delivery wrappers the amqp object
+	// wabbit Delivery wrappers the amqp091 object
 	d2 := amqp.Delivery{&d}
 
-	// return a test Delivery object that delegates all its methods to the actual
+	// return a test Delivery object that delegates all its methods to the rabbitmq delivery
 	d3 := &Delivery{
 		// some tests depend on the fields of this mock, so leave them for now
 		data:          data,
@@ -75,7 +75,11 @@ func (d *Delivery) Body() []byte {
 }
 
 func (d *Delivery) Headers() wabbit.Option {
-	return wabbit.Option(d.delivery.Headers())
+	return d.headers
+	// FIXME: do not delegate the headers to amqp091, use the headers from the mock,
+	// server/utils sometimes segfaults with the real d.Headers()
+	// Note that this only affects the test server, generic_cache does not call Headers.
+	// return wabbit.Option(d.delivery.Headers())
 }
 
 func (d *Delivery) DeliveryTag() uint64 {

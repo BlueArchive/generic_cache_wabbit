@@ -104,7 +104,6 @@ func headersMatch(b *BindingsMap, d *Delivery) (bool, error) {
 		if !strings.HasPrefix(key, "x-") {
 			switch cmpType {
 			case "any":
-				// FIXME: this test sometimes segfaults if using d.Headers()
 				if d.headers[key] == val {
 					return true, nil
 				}
