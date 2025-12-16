@@ -5,6 +5,7 @@ import (
 	"os"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/bluearchive/generic_cache_wabbit"
 	"github.com/bluearchive/generic_cache_wabbit/utils"
@@ -114,6 +115,7 @@ func (ch *Channel) Publish(exc, route string, msg []byte, opt wabbit.Option) err
 		wabbit.Option(hdrs),
 		contentType,
 		route,
+		time.Now(),
 	)
 
 	err := ch.VHost.Publish(exc, route, d, nil)
@@ -174,7 +176,7 @@ func (ch *Channel) Consume(queue, consumerName string, _ wabbit.Option) (<-chan 
 				// since we keep track of unacked messages for
 				// the channel, we need to rebind the delivery
 				// to the consumer channel.
-				d = NewDelivery(ch, d.Body(), d.DeliveryTag(), d.MessageId(), d.Headers(), d.ContentType(), d.RoutingKey())
+				d = NewDelivery(ch, d.Body(), d.DeliveryTag(), d.MessageId(), d.Headers(), d.ContentType(), d.RoutingKey(), d.Timestamp())
 
 				ch.addUnacked(d, q)
 

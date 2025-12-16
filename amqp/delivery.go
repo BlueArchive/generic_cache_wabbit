@@ -7,6 +7,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
+// pointer to rabbitmq Delivery, so can change the fields into methods
 type Delivery struct {
 	*amqp.Delivery
 }
@@ -32,7 +33,7 @@ func (d *Delivery) MessageId() string {
 }
 
 func (d *Delivery) Timestamp() time.Time {
-	return time.Now()
+	return d.Delivery.Timestamp
 }
 
 func (d *Delivery) ContentType() string {
